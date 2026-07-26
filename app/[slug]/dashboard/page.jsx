@@ -30,10 +30,17 @@ export default async function DashboardPage({ params }) {
     <div className="min-h-screen bg-neutral-50">
       <TenantNav slug={slug} businessName={business.name} />
 
-      <main className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard label="Customers" value={customerCount ?? 0} />
-        <StatCard label="Products" value={productCount ?? 0} />
-        <StatCard label="Invoices" value={invoiceCount ?? 0} />
+      <main className="p-6">
+        {business.status !== "active" && (
+          <div className="mb-4 rounded-md border border-amber-300 bg-amber-50 text-amber-800 text-sm px-4 py-3">
+            Your account status is <strong>{business.status}</strong>. Contact support if this looks wrong.
+          </div>
+        )}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <StatCard label="Customers" value={customerCount ?? 0} />
+          <StatCard label="Products" value={productCount ?? 0} />
+          <StatCard label="Invoices" value={invoiceCount ?? 0} />
+        </div>
       </main>
     </div>
   );
