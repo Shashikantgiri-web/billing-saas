@@ -5,9 +5,11 @@ import { usePathname } from "next/navigation";
 
 const LINKS = [
   { href: "dashboard", label: "Dashboard" },
+  { href: "invoices", label: "Invoices" },
   { href: "customers", label: "Customers" },
   { href: "products", label: "Products" },
   { href: "categories", label: "Categories" },
+  { href: "settings", label: "Settings" },
 ];
 
 export default function TenantNav({ slug, businessName }) {
