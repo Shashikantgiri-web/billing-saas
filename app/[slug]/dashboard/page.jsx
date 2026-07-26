@@ -1,5 +1,6 @@
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import TenantNav from "../tenant-nav";
 
 export default async function DashboardPage({ params }) {
   const { slug } = await params;
@@ -10,9 +11,6 @@ export default async function DashboardPage({ params }) {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // RLS already restricts this to businesses the caller owns — this query
-  // returning nothing means either the slug doesn't exist or it isn't theirs.
-  // Either way we must not distinguish (no business-existence leak via slug).
   const { data: business } = await supabase
     .from("business")
     .select("id, slug, name, status")
@@ -30,15 +28,7 @@ export default async function DashboardPage({ params }) {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <header className="border-b border-neutral-200 bg-white px-6 py-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-sm font-medium text-neutral-500">{business.name}</h1>
-          <p className="text-lg font-semibold text-neutral-900">Dashboard</p>
-        </div>
-        <form action="/api/auth/logout" method="POST">
-          <button className="text-sm text-neutral-600 hover:text-neutral-900">Log out</button>
-        </form>
-      </header>
+      <TenantNav slug={slug} businessName={business.name} />
 
       <main className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard label="Customers" value={customerCount ?? 0} />
