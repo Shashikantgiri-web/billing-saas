@@ -67,6 +67,9 @@ export async function POST(request, { params }) {
     });
 
     const discount = Number(discount_total) || 0;
+    if (discount < 0) {
+      return NextResponse.json({ error: "Discount cannot be negative" }, { status: 422 });
+    }
     const grandTotal = Number((subtotal + taxTotal - discount).toFixed(2));
 
     // Atomically claim the invoice number (locks business_settings row).
