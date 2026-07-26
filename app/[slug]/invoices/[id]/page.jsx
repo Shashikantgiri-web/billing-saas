@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import TenantNav from "../../tenant-nav";
+import { generateInvoicePDF, AVAILABLE_TEMPLATES } from "@/lib/pdf/generate-invoice";
 
 export default function InvoiceDetailPage() {
   const { slug, id } = useParams();
   const [data, setData] = useState(null);
+  const [template, setTemplate] = useState("gst_classic");
   const [downloading, setDownloading] = useState(false);
   const [voiding, setVoiding] = useState(false);
 
@@ -25,65 +27,10 @@ export default function InvoiceDetailPage() {
     if (!data) return;
     setDownloading(true);
     try {
-      const { default: jsPDF } = await import("jspdf");
-      const doc = new jsPDF();
       const { invoice, items, business } = data;
       const settings = business?.business_settings?.[0] || business?.business_settings || {};
-      const currency = settings.currency || "";
 
-      let y = 20;
-      doc.setFontSize(16);
-      doc.text(business?.name || "Invoice", 14, y);
-      y += 8;
-      doc.setFontSize(10);
-      if (business?.email) { doc.text(business.email, 14, y); y += 5; }
-      if (business?.phone) { doc.text(business.phone, 14, y); y += 5; }
-      if (settings.gst_number) { doc.text(`GST: ${settings.gst_number}`, 14, y); y += 5; }
-
-      y += 5;
-      doc.setFontSize(12);
-      doc.text(`Invoice ${invoice.invoice_number}`, 14, y);
-      doc.text(new Date(invoice.created_at).toLocaleDateString(), 150, y);
-      y += 8;
-
-      doc.setFontSize(10);
-      doc.text("Bill To:", 14, y);
-      y += 5;
-      doc.text(invoice.customers?.name || "", 14, y);
-      y += 5;
-      if (invoice.customers?.email) { doc.text(invoice.customers.email, 14, y); y += 5; }
-      if (invoice.customers?.phone) { doc.text(invoice.customers.phone, 14, y); y += 5; }
-
-      y += 8;
-      doc.setFontSize(10);
-      doc.text("Item", 14, y);
-      doc.text("Qty", 100, y);
-      doc.text("Price", 125, y);
-      doc.text("Tax%", 150, y);
-      doc.text("Total", 175, y);
-      y += 2;
-      doc.line(14, y, 196, y);
-      y += 6;
-
-      items.forEach((item) => {
-        doc.text(item.product_name, 14, y);
-        doc.text(String(item.quantity), 100, y);
-        doc.text(Number(item.unit_price).toFixed(2), 125, y);
-        doc.text(Number(item.tax_percent).toFixed(2), 150, y);
-        doc.text(Number(item.line_total).toFixed(2), 175, y);
-        y += 6;
-      });
-
-      y += 4;
-      doc.line(14, y, 196, y);
-      y += 8;
-
-      doc.text(`Subtotal: ${currency} ${Number(invoice.subtotal).toFixed(2)}`, 140, y); y += 6;
-      doc.text(`Tax: ${currency} ${Number(invoice.tax_total).toFixed(2)}`, 140, y); y += 6;
-      doc.text(`Discount: ${currency} ${Number(invoice.discount_total).toFixed(2)}`, 140, y); y += 6;
-      doc.setFontSize(12);
-      doc.text(`Grand Total: ${currency} ${Number(invoice.grand_total).toFixed(2)}`, 140, y);
-
+      const doc = await generateInvoicePDF({ invoice, items, business, settings }, template);
       doc.save(`${invoice.invoice_number}.pdf`);
     } finally {
       setDownloading(false);
@@ -135,7 +82,18 @@ export default function InvoiceDetailPage() {
               {invoice.status}
             </span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <select
+              value={template}
+              onChange={(e) => setTemplate(e.target.value)}
+              className="rounded-md border border-neutral-300 px-2 py-2 text-sm"
+            >
+              {AVAILABLE_TEMPLATES.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
             <button
               onClick={handleDownload}
               disabled={downloading}
