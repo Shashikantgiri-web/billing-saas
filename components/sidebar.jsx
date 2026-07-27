@@ -30,7 +30,7 @@ const NavItem = ({ href, icon: Icon, label, active }) => (
     className={cn(
       'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors',
       active 
-        ? 'text-[var(--sidebar-text-active)] bg-[var(--sidebar-item-active)] font-medium' 
+        ? 'text-(--sidebar-text-active) bg-(--sidebar-item-active) font-medium' 
         : 'text-[var(--sidebar-text)] hover:bg-[var(--sidebar-item-hover)] hover:text-white'
     )}
   >
