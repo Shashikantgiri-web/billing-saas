@@ -71,7 +71,7 @@ export default function InvoiceDetailPage() {
     <div className="min-h-screen bg-neutral-50">
       <TenantNav slug={slug} businessName={business?.name} />
       <main className="p-6 max-w-2xl">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h1 className="text-lg font-semibold text-neutral-900">{invoice.invoice_number}</h1>
             <span
@@ -120,7 +120,7 @@ export default function InvoiceDetailPage() {
           <p className="text-sm text-neutral-500">{invoice.customers?.phone}</p>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden mb-4">
+        <div className="bg-white border border-neutral-200 rounded-lg overflow-x-auto mb-4">
           <table className="w-full text-sm">
             <thead className="bg-neutral-100 text-neutral-500 text-left">
               <tr>

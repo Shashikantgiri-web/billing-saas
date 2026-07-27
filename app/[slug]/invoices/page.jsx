@@ -47,7 +47,7 @@ export default function InvoicesPage() {
         ) : invoices.length === 0 ? (
           <p className="text-sm text-neutral-500">No invoices yet.</p>
         ) : (
-          <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
+          <div className="bg-white border border-neutral-200 rounded-lg overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-neutral-100 text-neutral-500 text-left">
                 <tr>

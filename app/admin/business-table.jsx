@@ -25,7 +25,8 @@ export default function AdminBusinessTable({ initialBusinesses }) {
   }
 
   return (
-    <table className="w-full bg-white border border-neutral-200 rounded-lg overflow-hidden text-sm">
+    <div className="overflow-x-auto">
+      <table className="w-full bg-white border border-neutral-200 rounded-lg text-sm">
       <thead className="bg-neutral-100 text-neutral-500 text-left">
         <tr>
           <th className="px-4 py-2 font-medium">Business</th>
@@ -59,6 +60,7 @@ export default function AdminBusinessTable({ initialBusinesses }) {
           </tr>
         ))}
       </tbody>
-    </table>
+      </table>
+    </div>
   );
 }

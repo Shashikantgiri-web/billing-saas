@@ -79,7 +79,7 @@ export default function ReportsPage() {
               {report.recentInvoices.length === 0 ? (
                 <Empty text="No invoices yet." />
               ) : (
-                <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
+                <div className="bg-white border border-neutral-200 rounded-lg overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead className="bg-neutral-100 text-neutral-500 text-left">
                       <tr>
@@ -140,7 +140,7 @@ function Empty({ text }) {
 
 function Table({ headers, rows }) {
   return (
-    <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
+    <div className="bg-white border border-neutral-200 rounded-lg overflow-x-auto">
       <table className="w-full text-sm">
         <thead className="bg-neutral-100 text-neutral-500 text-left">
           <tr>

@@ -18,7 +18,7 @@ export default function TenantNav({ slug, businessName }) {
 
   return (
     <header className="border-b border-neutral-200 bg-white">
-      <div className="px-6 py-4 flex items-center justify-between">
+      <div className="px-3 sm:px-6 py-4 flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-neutral-500">{businessName}</p>
         </div>
@@ -26,7 +26,7 @@ export default function TenantNav({ slug, businessName }) {
           <button className="text-sm text-neutral-600 hover:text-neutral-900">Log out</button>
         </form>
       </div>
-      <nav className="px-6 flex gap-1">
+      <nav className="px-3 sm:px-6 flex gap-1 overflow-x-auto whitespace-nowrap">
         {LINKS.map((link) => {
           const href = `/${slug}/${link.href}`;
           const active = pathname.startsWith(href);
@@ -34,7 +34,7 @@ export default function TenantNav({ slug, businessName }) {
             <Link
               key={link.href}
               href={href}
-              className={`px-3 py-2 text-sm font-medium border-b-2 -mb-px ${
+              className={`shrink-0 px-3 py-2 text-sm font-medium border-b-2 -mb-px ${
                 active
                   ? "border-neutral-900 text-neutral-900"
                   : "border-transparent text-neutral-500 hover:text-neutral-900"
