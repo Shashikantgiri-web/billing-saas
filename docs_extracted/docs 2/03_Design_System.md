@@ -1,5 +1,18 @@
-@import "tailwindcss";
+# 03 — Design System
 
+## Philosophy
+
+Soft tactile modern design. Not flat. Not glassmorphism. Not old skeuomorphism.
+
+Every surface has depth. Every element feels touchable. Every interaction has feedback.
+
+---
+
+## Color Palette
+
+### CSS Variables (add to globals.css)
+
+```css
 @layer base {
   :root {
     /* Backgrounds */
@@ -106,7 +119,36 @@
     --shadow-dialog: 0 24px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
   }
 }
+```
 
+---
+
+## Typography
+
+### Font Setup (layout.js)
+
+```js
+import { Inter } from 'next/font/google';
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+```
+
+### Type Scale
+
+| Token | Size | Weight | Line Height | Use |
+|-------|------|--------|-------------|-----|
+| `text-hero` | 48px | 700 | 1.1 | Landing headings |
+| `text-page-title` | 32px | 700 | 1.2 | Page headers |
+| `text-section-title` | 22px | 600 | 1.3 | Section headers |
+| `text-card-title` | 17px | 600 | 1.4 | Card headers |
+| `text-body-lg` | 16px | 400 | 1.6 | Main body |
+| `text-body` | 15px | 400 | 1.6 | Secondary body |
+| `text-sm` | 13px | 400 | 1.5 | Captions, meta |
+| `text-xs` | 11px | 500 | 1.4 | Badges, labels |
+| `text-btn` | 14px | 600 | 1 | Button labels |
+
+### Tailwind v4 Custom Text Tokens (in globals.css)
+
+```css
 @theme {
   --font-family-sans: var(--font-inter), system-ui, sans-serif;
   --font-size-hero: 3rem;
@@ -117,17 +159,89 @@
   --font-size-body: 0.9375rem;
   --font-size-btn: 0.875rem;
 }
+```
 
-body {
-  background: var(--bg-base);
-  color: var(--text-primary);
-}
+---
 
-.card { box-shadow: var(--shadow-card); }
-.dropdown { box-shadow: var(--shadow-lg); }
-.dialog { box-shadow: var(--shadow-dialog); }
+## Spacing System
+
+Base unit: **8px**
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `space-1` | 4px | Icon gaps, micro spacing |
+| `space-2` | 8px | Tight component spacing |
+| `space-3` | 12px | Input padding vertical |
+| `space-4` | 16px | Card padding, gap |
+| `space-5` | 20px | Section gaps |
+| `space-6` | 24px | Card padding large |
+| `space-8` | 32px | Section padding |
+| `space-10` | 40px | Page section gaps |
+| `space-12` | 48px | Large page sections |
+
+---
+
+## Elevation System
+
+Four elevation levels for surfaces:
+
+| Level | CSS Variable | Use |
+|-------|-------------|-----|
+| `0` | `--bg-base` | Page background |
+| `1` | `--bg-surface` + `--shadow-card` | Cards, panels |
+| `2` | `--bg-elevated` + `--shadow-lg` | Dropdowns, popovers |
+| `3` | `--bg-elevated` + `--shadow-dialog` | Modals, dialogs |
+
+---
+
+## Border Radius Reference
+
+| Component | Radius | Token |
+|-----------|--------|-------|
+| Input | 12px | `--radius-input` |
+| Button | 12px | `--radius-button` |
+| Card | 16px | `--radius-card` |
+| Dialog | 20px | `--radius-dialog` |
+| Badge | 999px | `rounded-full` |
+| Avatar | 999px | `rounded-full` |
+| Dropdown | 14px | `--radius-lg` - 2px |
+
+---
+
+## Shadow Reference
+
+```css
+.card        { box-shadow: var(--shadow-card); }
+.dropdown    { box-shadow: var(--shadow-lg); }
+.dialog      { box-shadow: var(--shadow-dialog); }
 .btn-primary { box-shadow: 0 1px 2px rgba(79,70,229,0.3); }
+```
 
+---
+
+## Icon System
+
+Use **Lucide React** exclusively.
+
+```
+Default size:   16px (text-level icons, table actions)
+Medium size:    18px (button icons)
+Large size:     20px (nav icons)
+Hero size:      24px (empty states)
+```
+
+Import pattern:
+```jsx
+import { FileText, Users, Package, BarChart2, Settings, LogOut, Plus } from 'lucide-react';
+```
+
+---
+
+## Motion System
+
+All transitions use CSS. No external animation libraries.
+
+```css
 /* Base transition for interactive elements */
 .interactive {
   transition: all var(--transition-base);
@@ -157,3 +271,16 @@ body {
   50%       { opacity: 0.4; }
 }
 .skeleton { animation: skeleton-pulse 1.5s ease-in-out infinite; }
+```
+
+---
+
+## Status Color Map
+
+| Status | Background | Text | Border |
+|--------|-----------|------|--------|
+| `active` / `paid` | `--success-light` | `--success` | `--success-border` |
+| `pending` | `--warning-light` | `--warning` | `--warning-border` |
+| `void` / `error` | `--danger-light` | `--danger` | `--danger-border` |
+| `draft` | `--bg-sunken` | `--text-secondary` | `--border-default` |
+| `info` | `--info-light` | `--info` | `--info-border` |

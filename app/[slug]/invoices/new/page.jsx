@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import TenantNav from "../../tenant-nav";
 
 let lineIdCounter = 0;
 function newLine(defaults = {}) {
@@ -122,8 +121,7 @@ export default function NewInvoicePage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <TenantNav slug={slug} />
-      <main className="p-6 max-w-3xl">
+            <main className="p-6 max-w-3xl">
         <h1 className="text-lg font-semibold text-neutral-900 mb-4">New Invoice</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">

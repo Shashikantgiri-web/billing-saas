@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import TenantNav from "../../tenant-nav";
 import { generateInvoicePDF, AVAILABLE_TEMPLATES } from "@/lib/pdf/generate-invoice";
 
 export default function InvoiceDetailPage() {
@@ -57,8 +56,7 @@ export default function InvoiceDetailPage() {
   if (!data || !data.invoice) {
     return (
       <div className="min-h-screen bg-neutral-50">
-        <TenantNav slug={slug} />
-        <main className="p-6">
+                <main className="p-6">
           <p className="text-sm text-neutral-500">Loading...</p>
         </main>
       </div>
@@ -69,8 +67,7 @@ export default function InvoiceDetailPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <TenantNav slug={slug} businessName={business?.name} />
-      <main className="p-6 max-w-2xl">
+            <main className="p-6 max-w-2xl">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <div>
             <h1 className="text-lg font-semibold text-neutral-900">{invoice.invoice_number}</h1>

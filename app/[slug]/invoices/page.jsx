@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import TenantNav from "../tenant-nav";
 
 export default function InvoicesPage() {
   const { slug } = useParams();
@@ -29,8 +28,7 @@ export default function InvoicesPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <TenantNav slug={slug} businessName={business?.name} />
-
+      
       <main className="p-6">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-lg font-semibold text-neutral-900">Invoices</h1>

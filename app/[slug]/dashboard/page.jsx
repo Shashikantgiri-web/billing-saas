@@ -1,6 +1,5 @@
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import TenantNav from "../tenant-nav";
 
 export default async function DashboardPage({ params }) {
   const { slug } = await params;
@@ -28,8 +27,7 @@ export default async function DashboardPage({ params }) {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <TenantNav slug={slug} businessName={business.name} />
-
+      
       <main className="p-6">
         {business.status !== "active" && (
           <div className="mb-4 rounded-md border border-amber-300 bg-amber-50 text-amber-800 text-sm px-4 py-3">

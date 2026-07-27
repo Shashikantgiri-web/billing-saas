@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import TenantNav from "../tenant-nav";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SettingsPage() {
@@ -90,8 +89,7 @@ export default function SettingsPage() {
   if (loading || !form) {
     return (
       <div className="min-h-screen bg-neutral-50">
-        <TenantNav slug={slug} />
-        <main className="p-6">
+                <main className="p-6">
           <p className="text-sm text-neutral-500">Loading...</p>
         </main>
       </div>
@@ -100,8 +98,7 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <TenantNav slug={slug} businessName={business?.name} />
-      <main className="p-6 max-w-xl">
+            <main className="p-6 max-w-xl">
         <h1 className="text-lg font-semibold text-neutral-900 mb-4">Business Settings</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import TenantNav from "../tenant-nav";
 
 export default function CategoriesPage() {
   const { slug } = useParams();
@@ -67,8 +66,7 @@ export default function CategoriesPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <TenantNav slug={slug} businessName={business?.name} />
-
+      
       <main className="p-6 max-w-md">
         <h1 className="text-lg font-semibold text-neutral-900 mb-4">Categories</h1>
 

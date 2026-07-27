@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import TenantNav from "../../tenant-nav";
 
 export default function NewCustomerPage() {
   const { slug } = useParams();
@@ -35,8 +34,7 @@ export default function NewCustomerPage() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <TenantNav slug={slug} />
-      <main className="p-6 max-w-md">
+            <main className="p-6 max-w-md">
         <h1 className="text-lg font-semibold text-neutral-900 mb-4">New Customer</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Field label="Name" required value={form.name} onChange={update("name")} />
