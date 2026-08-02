@@ -14,6 +14,7 @@ import {
   LogOut 
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import ThemeToggle from './ThemeToggle';
 
 const NavGroup = ({ label, children }) => (
   <div className="mb-4">
@@ -81,6 +82,7 @@ export const Sidebar = ({ slug, businessName }) => {
             <p className="text-white text-sm font-medium truncate">{businessName}</p>
             <p className="text-[var(--sidebar-text)] text-xs truncate">Business Account</p>
           </div>
+          <ThemeToggle />
           <form action="/api/auth/logout" method="POST">
             <button type="submit" className="text-[var(--sidebar-text)] hover:text-white p-1 rounded transition-colors" title="Log out">
               <LogOut size={18} />
