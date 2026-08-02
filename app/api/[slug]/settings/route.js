@@ -30,7 +30,7 @@ export async function PATCH(request, { params }) {
     });
 
     const settingsUpdate = {};
-    ["logo_url", "signature_url", "gst_number", "invoice_prefix", "currency", "default_tax_percent"].forEach((f) => {
+    ["logo_url", "signature_url", "gst_number", "invoice_prefix", "currency", "default_tax_percent", "terms_conditions"].forEach((f) => {
       if (body[f] !== undefined) settingsUpdate[f] = body[f];
     });
 

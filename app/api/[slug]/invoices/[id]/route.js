@@ -66,3 +66,40 @@ export async function PATCH(request, { params }) {
     throw res;
   }
 }
+
+export async function DELETE(request, { params }) {
+  const { slug, id } = await params;
+  try {
+    const { supabase, business, user } = await requireTenant(slug);
+
+    const { data: existing } = await supabase
+      .from("invoices")
+      .select("id")
+      .eq("business_id", business.id)
+      .eq("id", id)
+      .eq("is_deleted", false)
+      .single();
+
+    if (!existing) return NextResponse.json({ error: "Invoice not found." }, { status: 404 });
+
+    const { error } = await supabase
+      .from("invoices")
+      .update({ is_deleted: true, deleted_at: new Date().toISOString(), deleted_by: user.id })
+      .eq("business_id", business.id)
+      .eq("id", id);
+
+    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+
+    await supabase.from("activity_logs").insert({
+      business_id: business.id,
+      user_id: user.id,
+      action: "invoice.deleted",
+      metadata: { invoice_id: id },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (res) {
+    if (res instanceof Response) return res;
+    throw res;
+  }
+}

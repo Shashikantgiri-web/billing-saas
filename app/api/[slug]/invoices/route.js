@@ -5,11 +5,15 @@ export async function GET(request, { params }) {
   const { slug } = await params;
   try {
     const { supabase, business } = await requireTenant(slug);
+    const url = new URL(request.url);
+    const showDeleted = url.searchParams.get("deleted") === "true";
+
     const { data, error } = await supabase
       .from("invoices")
       .select("*, customers(id, name)")
       .eq("business_id", business.id)
-      .order("created_at", { ascending: false });
+      .eq("is_deleted", showDeleted)
+      .order(showDeleted ? "deleted_at" : "created_at", { ascending: false });
 
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
     return NextResponse.json({ invoices: data });
@@ -25,7 +29,7 @@ export async function POST(request, { params }) {
     const { supabase, business, user } = await requireTenant(slug);
     const body = await request.json();
 
-    const { customer_id, items, discount_total } = body;
+    const { customer_id, items, discount_total, customer_invoice_number, measurement_unit } = body;
 
     if (!customer_id) {
       return NextResponse.json({ error: "Customer is required" }, { status: 422 });
@@ -33,6 +37,26 @@ export async function POST(request, { params }) {
     if (!Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ error: "At least one line item is required" }, { status: 422 });
     }
+    if (customer_invoice_number && customer_invoice_number.trim().length > 0) {
+      const val = customer_invoice_number.trim();
+      if (val.length < 3) {
+        return NextResponse.json(
+          { error: "Customer invoice number must be at least 3 characters." },
+          { status: 422 }
+        );
+      }
+      if (/^\d+$/.test(val)) {
+        return NextResponse.json(
+          {
+            error:
+              "Customer invoice number must contain at least one letter or special character (e.g. ABC-001, PO-9911).",
+          },
+          { status: 422 }
+        );
+      }
+    }
+    const validMeasurementUnits = ["none", "kg", "liter", "both"];
+    const measurementUnit = validMeasurementUnits.includes(measurement_unit) ? measurement_unit : "none";
     for (const item of items) {
       if (!item.product_name || !item.product_name.trim()) {
         return NextResponse.json({ error: "Every line item needs a name" }, { status: 422 });
@@ -62,6 +86,8 @@ export async function POST(request, { params }) {
         unit_price: unitPrice,
         tax_percent: taxPercent,
         quantity: qty,
+        kg_value: item.kg_value ? Number(item.kg_value) : null,
+        liter_value: item.liter_value ? Number(item.liter_value) : null,
         line_total: Number((lineBase + lineTax).toFixed(2)),
       };
     });
@@ -84,6 +110,8 @@ export async function POST(request, { params }) {
         business_id: business.id,
         customer_id,
         invoice_number: invoiceNumber,
+        customer_invoice_number: customer_invoice_number?.trim() || null,
+        measurement_unit: measurementUnit,
         subtotal: Number(subtotal.toFixed(2)),
         tax_total: Number(taxTotal.toFixed(2)),
         discount_total: discount,
