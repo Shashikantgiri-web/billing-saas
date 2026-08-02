@@ -3,24 +3,22 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CustomersPage() {
   const { slug } = useParams();
-  const [business, setBusiness] = useState(null);
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
 
   async function load() {
     setLoading(true);
-    const [bizRes, custRes] = await Promise.all([
-      fetch(`/api/${slug}`),
-      fetch(`/api/${slug}/customers`),
-    ]);
-    const biz = await bizRes.json();
-    const cust = await custRes.json();
-    setBusiness(biz.business);
-    setCustomers(cust.customers || []);
+    const res = await fetch(`/api/${slug}/customers`);
+    const data = await res.json();
+    setCustomers(data.customers || []);
     setLoading(false);
   }
 
@@ -43,59 +41,73 @@ export default function CustomersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      
-      <main className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-lg font-semibold text-neutral-900">Customers</h1>
-          <Link
-            href={`/${slug}/customers/new`}
-            className="rounded-md bg-neutral-900 text-white text-sm font-medium px-4 py-2"
-          >
-            + New Customer
-          </Link>
-        </div>
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-xl font-semibold" style={{ color: "var(--text-primary)" }}>
+          Customers
+        </h1>
+        <Link href={`/${slug}/customers/new`}>
+          <Button>
+            <Plus size={16} className="mr-1.5" />
+            New Customer
+          </Button>
+        </Link>
+      </div>
 
-        {loading ? (
-          <p className="text-sm text-neutral-500">Loading...</p>
-        ) : customers.length === 0 ? (
-          <p className="text-sm text-neutral-500">No customers yet.</p>
-        ) : (
-          <div className="bg-white border border-neutral-200 rounded-lg overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-neutral-100 text-neutral-500 text-left">
-                <tr>
-                  <th className="px-4 py-2 font-medium">Name</th>
-                  <th className="px-4 py-2 font-medium">Email</th>
-                  <th className="px-4 py-2 font-medium">Phone</th>
-                  <th className="px-4 py-2 font-medium"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {customers.map((c) => (
-                  <tr key={c.id} className="border-t border-neutral-200">
-                    <td className="px-4 py-2 text-neutral-900">{c.name}</td>
-                    <td className="px-4 py-2 text-neutral-500">{c.email || "—"}</td>
-                    <td className="px-4 py-2 text-neutral-500">{c.phone || "—"}</td>
-                    <td className="px-4 py-2 text-right space-x-3">
-                      <Link href={`/${slug}/customers/${c.id}/edit`} className="text-neutral-700 hover:text-neutral-900">
-                        Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(c.id)}
-                        disabled={deletingId === c.id}
-                        className="text-red-600 hover:text-red-700 disabled:opacity-50"
-                      >
-                        {deletingId === c.id ? "Deleting..." : "Delete"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {loading ? (
+        <div className="space-y-2">
+          <Skeleton className="h-12 w-full rounded-[var(--radius-md)]" />
+          <Skeleton className="h-12 w-full rounded-[var(--radius-md)]" />
+          <Skeleton className="h-12 w-full rounded-[var(--radius-md)]" />
+        </div>
+      ) : customers.length === 0 ? (
+        <Card>
+          <div className="p-10 text-center text-sm" style={{ color: "var(--text-muted)" }}>
+            No customers yet.
           </div>
-        )}
-      </main>
+        </Card>
+      ) : (
+        <Card className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
+              <tr className="text-left">
+                <th className="px-4 py-3 font-medium">Name</th>
+                <th className="px-4 py-3 font-medium">Email</th>
+                <th className="px-4 py-3 font-medium">Phone</th>
+                <th className="px-4 py-3 font-medium"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {customers.map((c) => (
+                <tr key={c.id} className="border-t" style={{ borderColor: "var(--border-subtle)" }}>
+                  <td className="px-4 py-3" style={{ color: "var(--text-primary)" }}>{c.name}</td>
+                  <td className="px-4 py-3" style={{ color: "var(--text-secondary)" }}>{c.email || "—"}</td>
+                  <td className="px-4 py-3" style={{ color: "var(--text-secondary)" }}>{c.phone || "—"}</td>
+                  <td className="px-4 py-3 text-right whitespace-nowrap">
+                    <Link
+                      href={`/${slug}/customers/${c.id}/edit`}
+                      className="inline-flex p-2 rounded-lg transition-colors hover:bg-[var(--bg-sunken)]"
+                      style={{ color: "var(--text-secondary)" }}
+                      title="Edit customer"
+                    >
+                      <Pencil size={15} />
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(c.id)}
+                      disabled={deletingId === c.id}
+                      title="Delete customer"
+                      className="p-2 rounded-lg transition-colors hover:bg-[var(--danger-light)] disabled:opacity-50"
+                      style={{ color: "var(--danger)" }}
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card>
+      )}
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default async function TenantLayout({ children, params }) {
     <div className="min-h-screen bg-[var(--bg-base)]">
       <Sidebar slug={slug} businessName={business?.name} />
       <div className="lg:ml-[260px] flex flex-col min-h-screen">
-        <TopBar slug={slug} pageTitle="Dashboard" />
+        <TopBar slug={slug} />
         <main className="flex-1 px-4 sm:px-8 py-6 max-w-7xl mx-auto w-full">
           {children}
         </main>

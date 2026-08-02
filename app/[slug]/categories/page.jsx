@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CategoriesPage() {
   const { slug } = useParams();
-  const [business, setBusiness] = useState(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newName, setNewName] = useState("");
@@ -15,14 +18,9 @@ export default function CategoriesPage() {
 
   async function load() {
     setLoading(true);
-    const [bizRes, catRes] = await Promise.all([
-      fetch(`/api/${slug}`),
-      fetch(`/api/${slug}/categories`),
-    ]);
-    const biz = await bizRes.json();
-    const cat = await catRes.json();
-    setBusiness(biz.business);
-    setCategories(cat.categories || []);
+    const res = await fetch(`/api/${slug}/categories`);
+    const data = await res.json();
+    setCategories(data.categories || []);
     setLoading(false);
   }
 
@@ -65,49 +63,61 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      
-      <main className="p-6 max-w-md">
-        <h1 className="text-lg font-semibold text-neutral-900 mb-4">Categories</h1>
+    <div className="max-w-md">
+      <h1 className="text-xl font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
+        Categories
+      </h1>
 
-        <form onSubmit={handleAdd} className="flex gap-2 mb-6">
-          <input
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            placeholder="New category name"
-            className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-900"
-          />
-          <button
-            type="submit"
-            disabled={adding}
-            className="rounded-md bg-neutral-900 text-white text-sm font-medium px-4 py-2 disabled:opacity-50"
-          >
-            {adding ? "Adding..." : "Add"}
-          </button>
-        </form>
-        {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
+      <form onSubmit={handleAdd} className="flex gap-2 mb-6">
+        <input
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          placeholder="New category name"
+          className="flex-1 rounded-[var(--radius-input)] border px-3 py-2 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+          style={{ borderColor: "var(--border-default)", background: "var(--bg-surface)", color: "var(--text-primary)" }}
+        />
+        <Button type="submit" isLoading={adding}>
+          {adding ? "Adding..." : "Add"}
+        </Button>
+      </form>
+      {error && <p className="text-sm mb-4" style={{ color: "var(--danger)" }}>{error}</p>}
 
-        {loading ? (
-          <p className="text-sm text-neutral-500">Loading...</p>
-        ) : categories.length === 0 ? (
-          <p className="text-sm text-neutral-500">No categories yet.</p>
-        ) : (
-          <ul className="bg-white border border-neutral-200 rounded-lg divide-y divide-neutral-200">
-            {categories.map((c) => (
-              <li key={c.id} className="px-4 py-2 flex items-center justify-between text-sm">
-                <span className="text-neutral-900">{c.name}</span>
+      {loading ? (
+        <div className="space-y-2">
+          <Skeleton className="h-10 w-full rounded-[var(--radius-md)]" />
+          <Skeleton className="h-10 w-full rounded-[var(--radius-md)]" />
+          <Skeleton className="h-10 w-full rounded-[var(--radius-md)]" />
+        </div>
+      ) : categories.length === 0 ? (
+        <Card>
+          <div className="p-8 text-center text-sm" style={{ color: "var(--text-muted)" }}>
+            No categories yet.
+          </div>
+        </Card>
+      ) : (
+        <Card>
+          <ul>
+            {categories.map((c, i) => (
+              <li
+                key={c.id}
+                className="px-4 py-3 flex items-center justify-between text-sm"
+                style={i > 0 ? { borderTop: "1px solid var(--border-subtle)" } : undefined}
+              >
+                <span style={{ color: "var(--text-primary)" }}>{c.name}</span>
                 <button
                   onClick={() => handleDelete(c.id)}
                   disabled={deletingId === c.id}
-                  className="text-red-600 hover:text-red-700 disabled:opacity-50"
+                  title="Delete category"
+                  className="p-1.5 rounded-lg transition-colors hover:bg-[var(--danger-light)] disabled:opacity-50"
+                  style={{ color: "var(--danger)" }}
                 >
-                  {deletingId === c.id ? "Deleting..." : "Delete"}
+                  <Trash2 size={15} />
                 </button>
               </li>
             ))}
           </ul>
-        )}
-      </main>
+        </Card>
+      )}
     </div>
   );
 }

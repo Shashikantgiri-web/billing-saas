@@ -1,7 +1,7 @@
-import { Inter } from 'next/font/google';
+// FONT_SWAP
 import "./globals.css";
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = { variable: '' };
 
 export const metadata = {
   title: "Billing SaaS",
