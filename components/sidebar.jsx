@@ -3,15 +3,16 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Users, 
-  Package, 
-  Tag, 
-  BarChart2, 
+import {
+  LayoutDashboard,
+  FileText,
+  Users,
+  Package,
+  Tag,
+  BarChart2,
   Settings,
-  LogOut 
+  LogOut,
+  X,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import ThemeToggle from './ThemeToggle';
@@ -25,13 +26,14 @@ const NavGroup = ({ label, children }) => (
   </div>
 );
 
-const NavItem = ({ href, icon: Icon, label, active }) => (
+const NavItem = ({ href, icon: Icon, label, active, onNavigate }) => (
   <Link
     href={href}
+    onClick={onNavigate}
     className={cn(
       'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors',
-      active 
-        ? 'text-(--sidebar-text-active) bg-(--sidebar-item-active) font-medium' 
+      active
+        ? 'text-(--sidebar-text-active) bg-(--sidebar-item-active) font-medium'
         : 'text-[var(--sidebar-text)] hover:bg-[var(--sidebar-item-hover)] hover:text-white'
     )}
   >
@@ -40,35 +42,43 @@ const NavItem = ({ href, icon: Icon, label, active }) => (
   </Link>
 );
 
-export const Sidebar = ({ slug, businessName }) => {
-  const pathname = usePathname();
-
+function SidebarContent({ slug, businessName, pathname, onNavigate, onClose }) {
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-[260px] z-30 bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border)] hidden lg:flex flex-col">
+    <>
       {/* Logo */}
       <div className="h-[60px] flex items-center px-6 border-b border-[var(--sidebar-border)]">
         <div className="w-8 h-8 rounded-lg bg-[var(--accent)] flex items-center justify-center mr-3">
           <FileText className="w-5 h-5 text-white" />
         </div>
-        <span className="text-[var(--text-inverse)] font-bold text-lg tracking-tight">BillingSaaS</span>
+        <span className="text-[var(--text-inverse)] font-bold text-lg tracking-tight flex-1">BillingSaaS</span>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="lg:hidden text-[var(--sidebar-text)] hover:text-white p-1 rounded"
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
         <NavGroup label="Main">
-          <NavItem href={`/${slug}/dashboard`} icon={LayoutDashboard} label="Dashboard" active={pathname.includes('/dashboard')} />
-          <NavItem href={`/${slug}/invoices`} icon={FileText} label="Invoices" active={pathname.includes('/invoices')} />
-          <NavItem href={`/${slug}/customers`} icon={Users} label="Customers" active={pathname.includes('/customers')} />
-          <NavItem href={`/${slug}/products`} icon={Package} label="Products" active={pathname.includes('/products')} />
-          <NavItem href={`/${slug}/categories`} icon={Tag} label="Categories" active={pathname.includes('/categories')} />
+          <NavItem href={`/${slug}/dashboard`} icon={LayoutDashboard} label="Dashboard" active={pathname.includes('/dashboard')} onNavigate={onNavigate} />
+          <NavItem href={`/${slug}/invoices`} icon={FileText} label="Invoices" active={pathname.includes('/invoices')} onNavigate={onNavigate} />
+          <NavItem href={`/${slug}/customers`} icon={Users} label="Customers" active={pathname.includes('/customers')} onNavigate={onNavigate} />
+          <NavItem href={`/${slug}/products`} icon={Package} label="Products" active={pathname.includes('/products')} onNavigate={onNavigate} />
+          <NavItem href={`/${slug}/categories`} icon={Tag} label="Categories" active={pathname.includes('/categories')} onNavigate={onNavigate} />
         </NavGroup>
 
         <NavGroup label="Analytics">
-          <NavItem href={`/${slug}/reports`} icon={BarChart2} label="Reports" active={pathname.includes('/reports')} />
+          <NavItem href={`/${slug}/reports`} icon={BarChart2} label="Reports" active={pathname.includes('/reports')} onNavigate={onNavigate} />
         </NavGroup>
 
         <NavGroup label="Account">
-          <NavItem href={`/${slug}/settings`} icon={Settings} label="Settings" active={pathname.includes('/settings')} />
+          <NavItem href={`/${slug}/settings`} icon={Settings} label="Settings" active={pathname.includes('/settings')} onNavigate={onNavigate} />
         </NavGroup>
       </nav>
 
@@ -90,6 +100,39 @@ export const Sidebar = ({ slug, businessName }) => {
           </form>
         </div>
       </div>
-    </aside>
+    </>
+  );
+}
+
+export const Sidebar = ({ slug, businessName, mobileOpen, onCloseMobile }) => {
+  const pathname = usePathname();
+
+  return (
+    <>
+      {/* Desktop sidebar — always visible at lg+ */}
+      <aside className="fixed left-0 top-0 bottom-0 w-[260px] z-30 bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border)] hidden lg:flex flex-col">
+        <SidebarContent slug={slug} businessName={businessName} pathname={pathname} />
+      </aside>
+
+      {/* Mobile drawer — slides in over content, closes on backdrop tap or nav */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={onCloseMobile}
+            aria-hidden="true"
+          />
+          <aside className="absolute left-0 top-0 bottom-0 w-[260px] bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border)] flex flex-col shadow-2xl">
+            <SidebarContent
+              slug={slug}
+              businessName={businessName}
+              pathname={pathname}
+              onNavigate={onCloseMobile}
+              onClose={onCloseMobile}
+            />
+          </aside>
+        </div>
+      )}
+    </>
   );
 };

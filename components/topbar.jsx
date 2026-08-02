@@ -25,14 +25,19 @@ function deriveTitle(pathname, slug) {
   return base;
 }
 
-export const TopBar = ({ slug }) => {
+export const TopBar = ({ slug, onMenuClick }) => {
   const pathname = usePathname();
   const pageTitle = deriveTitle(pathname, slug);
 
   return (
     <header className="sticky top-0 z-20 h-[60px] bg-[var(--bg-surface)]/80 backdrop-blur-md border-b border-[var(--border-subtle)] flex items-center px-6 gap-4">
-      {/* Mobile menu button (visual only for now without full mobile drawer) */}
-      <button className="lg:hidden text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+      {/* Mobile menu button */}
+      <button
+        type="button"
+        onClick={onMenuClick}
+        className="lg:hidden text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+        aria-label="Open menu"
+      >
         <Menu size={24} />
       </button>
 
