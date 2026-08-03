@@ -5,6 +5,7 @@ import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import GlobalSearch from './GlobalSearch';
+import NotificationCenter from './NotificationCenter';
 
 const TITLES = {
   dashboard: 'Dashboard',
@@ -55,7 +56,8 @@ export const TopBar = ({ slug, onMenuClick }) => {
       </div>
 
       {/* Right actions */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
+        <NotificationCenter />
         <Link 
           href={`/${slug}/invoices/new`}
           className="h-8 px-3 inline-flex items-center justify-center rounded-[var(--radius-button)] text-xs font-medium bg-[var(--accent)] text-white hover:bg-[var(--accent-hover)] transition-colors"

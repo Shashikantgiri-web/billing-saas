@@ -21,7 +21,7 @@ export async function GET(request, { params }) {
 export async function PATCH(request, { params }) {
   const { slug } = await params;
   try {
-    const { supabase, business } = await requireTenant(slug);
+    const { supabase, business, user } = await requireTenant(slug);
     const body = await request.json();
 
     const businessUpdate = {};
@@ -50,6 +50,12 @@ export async function PATCH(request, { params }) {
         { status: 400 }
       );
     }
+
+    // Best-effort activity log — never blocks the response on failure.
+    supabase
+      .from("activity_logs")
+      .insert({ business_id: business.id, user_id: user.id, action: "settings.updated", metadata: {} })
+      .then(() => {});
 
     return NextResponse.json({ success: true });
   } catch (res) {
