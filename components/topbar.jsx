@@ -4,6 +4,7 @@ import React from 'react';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import GlobalSearch from './GlobalSearch';
 
 const TITLES = {
   dashboard: 'Dashboard',
@@ -46,8 +47,12 @@ export const TopBar = ({ slug, onMenuClick }) => {
         <span className="font-medium text-[var(--text-primary)]">{pageTitle}</span>
       </div>
 
-      {/* Spacer */}
-      <div className="flex-1" />
+      {/* Spacer + search */}
+      <div className="flex-1 flex justify-end sm:justify-center">
+        <div className="hidden sm:block">
+          <GlobalSearch />
+        </div>
+      </div>
 
       {/* Right actions */}
       <div className="flex items-center gap-4">

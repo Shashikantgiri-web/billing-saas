@@ -92,6 +92,18 @@ function SidebarContent({ slug, businessName, pathname, onNavigate, onClose }) {
             <p className="text-white text-sm font-medium truncate">{businessName}</p>
             <p className="text-[var(--sidebar-text)] text-xs truncate">Business Account</p>
           </div>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('show-shortcuts'))}
+            title="Keyboard shortcuts (?)"
+            aria-label="Show keyboard shortcuts"
+            className="p-2 rounded-lg transition-colors text-xs font-mono shrink-0"
+            style={{ color: 'var(--sidebar-text)' }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--sidebar-item-hover)')}
+            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+          >
+            ?
+          </button>
           <ThemeToggle />
           <form action="/api/auth/logout" method="POST">
             <button type="submit" className="text-[var(--sidebar-text)] hover:text-white p-1 rounded transition-colors" title="Log out">

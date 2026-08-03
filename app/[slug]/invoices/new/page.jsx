@@ -30,6 +30,17 @@ const inputStyle = {
   color: "var(--text-primary)",
 };
 
+function Field({ label, children }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-muted)" }}>
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
 export default function NewInvoicePage() {
   const { slug } = useParams();
   const router = useRouter();
@@ -278,7 +289,130 @@ export default function NewInvoicePage() {
             </button>
           </div>
 
-          <Card className="overflow-x-auto">
+          {/* Mobile: stacked card per line item */}
+          <div className="sm:hidden space-y-3">
+            {lines.map((l, idx) => {
+              const lineTotal =
+                (Number(l.unit_price) || 0) *
+                  (Number(l.quantity) || 0) *
+                  (1 + (Number(l.tax_percent) || 0) / 100) || 0;
+              return (
+                <Card key={l.key} className="p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold" style={{ color: "var(--text-muted)" }}>
+                      Line {idx + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeLine(l.key)}
+                      className="p-1 rounded-md transition-colors hover:bg-[var(--danger-light)]"
+                      style={{ color: "var(--danger)" }}
+                      aria-label="Remove line"
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
+
+                  <select
+                    value={l.product_id}
+                    onChange={(e) => handleProductPick(l.key, e.target.value)}
+                    className={inputClass}
+                    style={inputStyle}
+                  >
+                    <option value="">Custom item</option>
+                    {products.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    value={l.product_name}
+                    onChange={(e) => updateLine(l.key, { product_name: e.target.value })}
+                    placeholder="Item name"
+                    className={inputClass}
+                    style={inputStyle}
+                  />
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <Field label="Qty">
+                      <input
+                        type="number"
+                        min="1"
+                        value={l.quantity}
+                        onChange={(e) => updateLine(l.key, { quantity: e.target.value })}
+                        className={inputClass}
+                        style={inputStyle}
+                      />
+                    </Field>
+                    <Field label="Price">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={l.unit_price}
+                        onChange={(e) => updateLine(l.key, { unit_price: e.target.value })}
+                        className={inputClass}
+                        style={inputStyle}
+                      />
+                    </Field>
+                    {showKg && (
+                      <Field label="Kg">
+                        <input
+                          type="number"
+                          step="0.001"
+                          min="0"
+                          value={l.kg_value}
+                          onChange={(e) => updateLine(l.key, { kg_value: e.target.value })}
+                          placeholder="0.000"
+                          className={inputClass}
+                          style={inputStyle}
+                        />
+                      </Field>
+                    )}
+                    {showLiter && (
+                      <Field label="Liter">
+                        <input
+                          type="number"
+                          step="0.001"
+                          min="0"
+                          value={l.liter_value}
+                          onChange={(e) => updateLine(l.key, { liter_value: e.target.value })}
+                          placeholder="0.000"
+                          className={inputClass}
+                          style={inputStyle}
+                        />
+                      </Field>
+                    )}
+                    <Field label="Tax %">
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={l.tax_percent}
+                        onChange={(e) => updateLine(l.key, { tax_percent: e.target.value })}
+                        className={inputClass}
+                        style={inputStyle}
+                      />
+                    </Field>
+                  </div>
+
+                  <div
+                    className="flex items-center justify-between pt-2 border-t text-sm"
+                    style={{ borderColor: "var(--border-subtle)" }}
+                  >
+                    <span style={{ color: "var(--text-muted)" }}>Line Total</span>
+                    <span className="font-medium" style={{ color: "var(--text-primary)" }}>
+                      {lineTotal.toFixed(2)}
+                    </span>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Desktop: table */}
+          <Card className="hidden sm:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
                 <tr className="text-left">

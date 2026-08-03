@@ -1,11 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sidebar } from './sidebar';
 import { TopBar } from './topbar';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import ShortcutsDialog from './ShortcutsDialog';
 
 export default function AppShell({ slug, businessName, children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+
+  useKeyboardShortcuts({ slug, onShowHelp: () => setHelpOpen(true) });
+
+  useEffect(() => {
+    const handler = () => setHelpOpen(true);
+    window.addEventListener('show-shortcuts', handler);
+    return () => window.removeEventListener('show-shortcuts', handler);
+  }, []);
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)]">
@@ -21,6 +32,7 @@ export default function AppShell({ slug, businessName, children }) {
           {children}
         </main>
       </div>
+      <ShortcutsDialog open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
   );
 }
