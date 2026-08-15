@@ -47,9 +47,8 @@ function SidebarContent({ slug, businessName, pathname, onNavigate, onClose }) {
     <>
       {/* Logo */}
       <div className="h-[60px] flex items-center px-6 border-b border-[var(--sidebar-border)]">
-        <div className="w-8 h-8 rounded-lg bg-[var(--accent)] flex items-center justify-center mr-3">
-          <FileText className="w-5 h-5 text-white" />
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/icon-192.png" alt="" className="w-8 h-8 rounded-lg mr-3" />
         <span className="text-[var(--text-inverse)] font-bold text-lg tracking-tight flex-1">BillingSaaS</span>
         {onClose && (
           <button

@@ -30,6 +30,8 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-sm">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/icon-192.png" alt="BillingSaaS" className="w-10 h-10 rounded-xl mb-4" />
         <h1 className="text-xl font-semibold text-neutral-900 mb-1">Reset password</h1>
         <p className="text-sm text-neutral-500 mb-6">
           We&apos;ll email you a link to reset your password.
