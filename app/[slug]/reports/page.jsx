@@ -78,11 +78,11 @@ export default function ReportsPage() {
                 <table className="w-full text-sm">
                   <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
                     <tr className="text-left">
-                      <th className="px-4 py-3 font-medium">Invoice #</th>
-                      <th className="px-4 py-3 font-medium">Customer</th>
-                      <th className="px-4 py-3 font-medium">Total</th>
-                      <th className="px-4 py-3 font-medium">Status</th>
-                      <th className="px-4 py-3 font-medium"></th>
+                      <th scope="col" className="px-4 py-3 font-medium">Invoice #</th>
+                      <th scope="col" className="px-4 py-3 font-medium">Customer</th>
+                      <th scope="col" className="px-4 py-3 font-medium">Total</th>
+                      <th scope="col" className="px-4 py-3 font-medium">Status</th>
+                      <th scope="col" className="px-4 py-3 font-medium"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -139,7 +139,7 @@ function Table({ headers, rows }) {
         <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
           <tr className="text-left">
             {headers.map((h) => (
-              <th key={h} className="px-4 py-3 font-medium">
+              <th key={h} scope="col" className="px-4 py-3 font-medium">
                 {h}
               </th>
             ))}

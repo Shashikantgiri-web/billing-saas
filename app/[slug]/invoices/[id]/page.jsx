@@ -132,13 +132,13 @@ export default function InvoiceDetailPage() {
         <table className="w-full text-sm">
           <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
             <tr className="text-left">
-              <th className="px-4 py-3 font-medium">Item</th>
-              <th className="px-4 py-3 font-medium">Qty</th>
-              {showKg && <th className="px-4 py-3 font-medium">Kg</th>}
-              {showLiter && <th className="px-4 py-3 font-medium">Liter</th>}
-              <th className="px-4 py-3 font-medium">Price</th>
-              <th className="px-4 py-3 font-medium">Tax %</th>
-              <th className="px-4 py-3 font-medium">Total</th>
+              <th scope="col" className="px-4 py-3 font-medium">Item</th>
+              <th scope="col" className="px-4 py-3 font-medium">Qty</th>
+              {showKg && <th scope="col" className="px-4 py-3 font-medium">Kg</th>}
+              {showLiter && <th scope="col" className="px-4 py-3 font-medium">Liter</th>}
+              <th scope="col" className="px-4 py-3 font-medium">Price</th>
+              <th scope="col" className="px-4 py-3 font-medium">Tax %</th>
+              <th scope="col" className="px-4 py-3 font-medium">Total</th>
             </tr>
           </thead>
           <tbody>

@@ -71,11 +71,11 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
               <tr className="text-left">
-                <th className="px-4 py-3 font-medium">Name</th>
-                <th className="px-4 py-3 font-medium">Category</th>
-                <th className="px-4 py-3 font-medium">Price</th>
-                <th className="px-4 py-3 font-medium">Tax %</th>
-                <th className="px-4 py-3 font-medium"></th>
+                <th scope="col" className="px-4 py-3 font-medium">Name</th>
+                <th scope="col" className="px-4 py-3 font-medium">Category</th>
+                <th scope="col" className="px-4 py-3 font-medium">Price</th>
+                <th scope="col" className="px-4 py-3 font-medium">Tax %</th>
+                <th scope="col" className="px-4 py-3 font-medium"></th>
               </tr>
             </thead>
             <tbody>

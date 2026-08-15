@@ -20,6 +20,13 @@ export default function AppShell({ slug, businessName, children }) {
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)]">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] px-4 py-2 rounded-[var(--radius-button)] text-sm font-medium text-white"
+        style={{ background: "var(--accent)" }}
+      >
+        Skip to main content
+      </a>
       <Sidebar
         slug={slug}
         businessName={businessName}
@@ -28,7 +35,7 @@ export default function AppShell({ slug, businessName, children }) {
       />
       <div className="lg:ml-[260px] flex flex-col min-h-screen">
         <TopBar slug={slug} onMenuClick={() => setMobileOpen(true)} />
-        <main className="flex-1 px-4 sm:px-8 py-6 max-w-7xl mx-auto w-full">
+        <main id="main-content" className="flex-1 px-4 sm:px-8 py-6 max-w-7xl mx-auto w-full">
           {children}
         </main>
       </div>

@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /*/dashboard
+Disallow: /*/invoices
+Disallow: /*/customers
+Disallow: /*/products
+Disallow: /*/categories
+Disallow: /*/reports
+Disallow: /*/settings
+Disallow: /admin
+Disallow: /redirecting
+
+Sitemap: https://billing-saas-pearl.vercel.app/sitemap.xml

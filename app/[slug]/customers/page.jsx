@@ -71,10 +71,10 @@ export default function CustomersPage() {
           <table className="w-full text-sm">
             <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
               <tr className="text-left">
-                <th className="px-4 py-3 font-medium">Name</th>
-                <th className="px-4 py-3 font-medium">Email</th>
-                <th className="px-4 py-3 font-medium">Phone</th>
-                <th className="px-4 py-3 font-medium"></th>
+                <th scope="col" className="px-4 py-3 font-medium">Name</th>
+                <th scope="col" className="px-4 py-3 font-medium">Email</th>
+                <th scope="col" className="px-4 py-3 font-medium">Phone</th>
+                <th scope="col" className="px-4 py-3 font-medium"></th>
               </tr>
             </thead>
             <tbody>

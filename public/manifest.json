@@ -1,0 +1,14 @@
+{
+  "name": "BillingSaaS — Invoicing & Billing Platform",
+  "short_name": "BillingSaaS",
+  "description": "Professional invoicing and billing for small businesses. Create GST-compliant invoices, manage customers and products, and track revenue.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F9FC",
+  "theme_color": "#4F46E5",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/apple-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

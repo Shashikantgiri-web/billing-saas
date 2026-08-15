@@ -416,14 +416,14 @@ export default function NewInvoicePage() {
             <table className="w-full text-sm">
               <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
                 <tr className="text-left">
-                  <th className="px-3 py-3 font-medium">Product</th>
-                  <th className="px-3 py-3 font-medium w-20">Qty</th>
-                  {showKg && <th className="px-3 py-3 font-medium w-24">Kg</th>}
-                  {showLiter && <th className="px-3 py-3 font-medium w-24">Liter</th>}
-                  <th className="px-3 py-3 font-medium w-28">Price</th>
-                  <th className="px-3 py-3 font-medium w-24">Tax %</th>
-                  <th className="px-3 py-3 font-medium w-28">Line Total</th>
-                  <th className="px-3 py-3 w-10"></th>
+                  <th scope="col" className="px-3 py-3 font-medium">Product</th>
+                  <th scope="col" className="px-3 py-3 font-medium w-20">Qty</th>
+                  {showKg && <th scope="col" className="px-3 py-3 font-medium w-24">Kg</th>}
+                  {showLiter && <th scope="col" className="px-3 py-3 font-medium w-24">Liter</th>}
+                  <th scope="col" className="px-3 py-3 font-medium w-28">Price</th>
+                  <th scope="col" className="px-3 py-3 font-medium w-24">Tax %</th>
+                  <th scope="col" className="px-3 py-3 font-medium w-28">Line Total</th>
+                  <th scope="col" className="px-3 py-3 w-10"></th>
                 </tr>
               </thead>
               <tbody>

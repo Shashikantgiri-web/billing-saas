@@ -1,6 +1,7 @@
 "use client";
 import { X } from "lucide-react";
 import { useEffect } from "react";
+import { useFocusTrap } from "../hooks/useFocusTrap";
 
 const SHORTCUTS = [
   { key: "N", description: "New Invoice" },
@@ -14,6 +15,8 @@ const SHORTCUTS = [
 ];
 
 export default function ShortcutsDialog({ open, onClose }) {
+  const dialogRef = useFocusTrap(open);
+
   useEffect(() => {
     if (!open) return;
     function handler(e) {
@@ -31,9 +34,10 @@ export default function ShortcutsDialog({ open, onClose }) {
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label="Keyboard shortcuts"
+      aria-labelledby="shortcuts-dialog-title"
     >
       <div
+        ref={dialogRef}
         className="w-full max-w-sm rounded-[var(--radius-dialog)] overflow-hidden"
         style={{ background: "var(--bg-surface)", boxShadow: "var(--shadow-dialog)" }}
         onClick={(e) => e.stopPropagation()}
@@ -42,7 +46,7 @@ export default function ShortcutsDialog({ open, onClose }) {
           className="flex items-center justify-between px-5 py-4 border-b"
           style={{ borderColor: "var(--border-subtle)" }}
         >
-          <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
+          <h2 id="shortcuts-dialog-title" className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
             Keyboard Shortcuts
           </h2>
           <button

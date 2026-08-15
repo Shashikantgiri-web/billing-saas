@@ -29,10 +29,10 @@ export default function AdminBusinessTable({ initialBusinesses }) {
       <table className="w-full bg-white border border-neutral-200 rounded-lg text-sm">
       <thead className="bg-neutral-100 text-neutral-500 text-left">
         <tr>
-          <th className="px-4 py-2 font-medium">Business</th>
-          <th className="px-4 py-2 font-medium">Slug</th>
-          <th className="px-4 py-2 font-medium">Status</th>
-          <th className="px-4 py-2 font-medium">Joined</th>
+          <th scope="col" className="px-4 py-2 font-medium">Business</th>
+          <th scope="col" className="px-4 py-2 font-medium">Slug</th>
+          <th scope="col" className="px-4 py-2 font-medium">Status</th>
+          <th scope="col" className="px-4 py-2 font-medium">Joined</th>
         </tr>
       </thead>
       <tbody>

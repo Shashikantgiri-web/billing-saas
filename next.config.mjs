@@ -7,6 +7,17 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  compress: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/**",
+      },
+    ],
+    formats: ["image/webp", "image/avif"],
+  },
   async headers() {
     return [
       {

@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Plus, Eye, Trash2, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -17,6 +18,7 @@ export default function InvoicesPage() {
   const [view, setView] = useState("active"); // "active" | "deleted"
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const dialogRef = useFocusTrap(!!deleteTarget);
 
   async function loadActive() {
     const res = await fetch(`/api/${slug}/invoices`);
@@ -109,12 +111,12 @@ export default function InvoicesPage() {
           <table className="w-full text-sm">
             <thead style={{ background: "var(--bg-sunken)", color: "var(--text-muted)" }}>
               <tr className="text-left">
-                <th className="px-4 py-3 font-medium">Invoice #</th>
-                <th className="px-4 py-3 font-medium">Customer</th>
-                <th className="px-4 py-3 font-medium">Total</th>
-                <th className="px-4 py-3 font-medium">Status</th>
-                <th className="px-4 py-3 font-medium">Date</th>
-                <th className="px-4 py-3 font-medium"></th>
+                <th scope="col" className="px-4 py-3 font-medium">Invoice #</th>
+                <th scope="col" className="px-4 py-3 font-medium">Customer</th>
+                <th scope="col" className="px-4 py-3 font-medium">Total</th>
+                <th scope="col" className="px-4 py-3 font-medium">Status</th>
+                <th scope="col" className="px-4 py-3 font-medium">Date</th>
+                <th scope="col" className="px-4 py-3 font-medium"></th>
               </tr>
             </thead>
             <tbody>
@@ -191,6 +193,7 @@ export default function InvoicesPage() {
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
           <div
+            ref={dialogRef}
             className="w-full max-w-sm rounded-[var(--radius-dialog)] p-6 space-y-4"
             style={{ background: "var(--bg-surface)", boxShadow: "var(--shadow-dialog)" }}
             role="dialog"
